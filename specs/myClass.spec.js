@@ -1,7 +1,9 @@
 const myClass = require("../src/myClass");
 const myObj = new myClass();
 const sinon = require("sinon");
-const { expect } = require("chai");
+const { expect, ...chai } = require("chai");
+const chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
 
 describe.skip("Test suit", () => {
   it(`Test the add method`, () => {
@@ -36,7 +38,7 @@ describe.skip("Test suit", () => {
   });
 });
 
-describe("Test suit for stub", () => {
+describe.skip("Test suit for stub", () => {
   it(`Stub the add method`, () => {
     const stub = sinon.stub(myObj, "add");
     stub.withArgs(10, 20).onFirstCall().returns(100);
@@ -44,5 +46,18 @@ describe("Test suit for stub", () => {
 
     expect(myObj.callAnotherFn(10, 20)).to.be.equal(100);
     expect(myObj.callAnotherFn(10, 20)).to.be.equal(200);
+  });
+});
+
+describe("Test the promise", () => {
+  it("Promise test case", function (done) {
+    this.timeout(0);
+    // myObj.testPromise().then(function (result) {
+    //   // console.log({ result });
+    //   expect(result).to.be.equal(6);
+    //   done();
+    // });
+
+    return expect(myObj.testPromise()).to.eventually.equal(6);
   });
 });
